@@ -1,0 +1,126 @@
+---
+title: "Task2"
+author: "Diana Shchuka"
+format: 
+  html:
+    embed-resources: true
+editor: source
+---
+
+1. Create the next random vector:
+
+v <- rnorm(50)
+
+For the vector print:
+
+10th item,
+items from 10th to 20th (including 20th item),
+10 items starting from 5th,
+all items bigger than 0,
+last 5 items.
+
+```{r}
+# Create a random vector of 50 items from a normal distribution
+set.seed(123)  # Set seed for reproducibility
+v <- rnorm(50)
+
+# Print the 10th item
+tenth_item <- v[10]
+cat("10th item:", tenth_item, "\n")
+
+# Print items from 10th to 20th (including 20th item)
+items_10_to_20 <- v[10:20]
+cat("Items from 10th to 20th:", items_10_to_20, "\n")
+
+# Print 10 items starting from the 5th
+items_5_to_14 <- v[5:(5+9)]
+cat("10 items starting from 5th:", items_5_to_14, "\n")
+
+# Print all items bigger than 0
+items_bigger_than_0 <- v[v > 0]
+cat("All items bigger than 0:", items_bigger_than_0, "\n")
+
+# Print the last 5 items
+last_5_items <- tail(v, 5)
+cat("Last 5 items:", last_5_items, "\n")
+```
+
+2. Create the next data frame:
+
+df <- 
+  data.frame(a = rnorm(50), b = 1:50, 
+             cc = sample(letters, 50, replace = TRUE))
+             
+For the data frame find and print:
+
+the last 10 rows,
+15th item of columns cc,
+subset columns a and b and rows from 10th to 20th (including 20th),
+a new vector from column b.
+
+```{r}
+# Create the data frame
+set.seed(123)  # Set seed for reproducibility
+df <- data.frame(
+  a = rnorm(50),                        # Column a with random normal values
+  b = 1:50,                             # Column b with sequential numbers from 1 to 50
+  cc = sample(letters, 50, replace = TRUE)  # Column cc with random letters
+)
+
+# Print the last 10 rows
+cat("Last 10 rows:\n")
+print(tail(df, 10))
+
+# Print the 15th item of column cc
+fifteenth_item_cc <- df$cc[15]
+cat("15th item of column cc:", fifteenth_item_cc, "\n")
+
+# Print subset of columns a and b and rows from 10th to 20th (including 20th)
+cat("Subset of columns a and b (rows 10 to 20):\n")
+subset_ab <- df[10:20, c("a", "b")]
+print(subset_ab)
+
+# Create a new vector from column b
+new_vector_b <- df$b
+cat("New vector from column b:\n")
+print(new_vector_b)
+```
+
+3. Create the next random vector:
+
+v_na <- rnorm(30)
+num_na <- sample(10, 1)
+v_na[sample(30, num_na)] <- NA
+
+For this vector:
+
+print all not NA items,
+find how many NA values the vector has,
+find min max and mean for the vector.
+
+```{r}
+# Create a random vector with 30 items from a normal distribution
+set.seed(123)  # Set seed for reproducibility
+v_na <- rnorm(30)
+
+# Randomly select a number of NA values to insert
+num_na <- sample(10, 1)
+v_na[sample(30, num_na)] <- NA  # Insert NA values into the vector
+
+# Print all non-NA items
+cat("All non-NA items:\n")
+print(v_na[!is.na(v_na)])
+
+# Find how many NA values the vector has
+na_count <- sum(is.na(v_na))
+cat("Number of NA values:", na_count, "\n")
+
+# Find min, max, and mean for the vector (excluding NA values)
+min_value <- min(v_na, na.rm = TRUE)
+max_value <- max(v_na, na.rm = TRUE)
+mean_value <- mean(v_na, na.rm = TRUE)
+
+cat("Minimum value (excluding NA):", min_value, "\n")
+cat("Maximum value (excluding NA):", max_value, "\n")
+cat("Mean value (excluding NA):", mean_value, "\n")
+```
