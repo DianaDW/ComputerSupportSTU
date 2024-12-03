@@ -1,0 +1,68 @@
+---
+title: "Task5"
+author: "Diana Shchuka"
+format: 
+  html:
+    embed-resources: true
+editor: source
+---
+
+1. Setup and load dataset:
+```{r}
+library(ggplot2)
+
+airbnb_data <- read.csv("airbnb.csv")
+```
+
+3. Histogram (Base Plotting System):
+```{r}
+hist(
+  airbnb_data$realSum,
+  breaks = 30,
+  col = "skyblue",
+  main = "Distribution of Airbnb Prices",
+  xlab = "Price (realSum)",
+  ylab = "Frequency"
+)
+```
+
+4. Scatter Plot (ggplot2):
+```{r}
+ggplot(airbnb_data, aes(x = dist, y = realSum, color = guest_satisfaction_overall)) +
+  geom_point(alpha = 0.7) +
+  labs(
+    title = "Scatter Plot of Price vs. Distance",
+    x = "Distance from City Center",
+    y = "Price (realSum)",
+    color = "Satisfaction Rating"
+  ) +
+  theme_minimal()
+```
+
+5. Boxplot (ggplot2):
+```{r}
+ggplot(airbnb_data, aes(x = day_type, y = realSum, fill = day_type)) +
+  geom_boxplot() +
+  labs(
+    title = "Boxplot of Prices by Day Type",
+    x = "Day Type",
+    y = "Price (realSum)"
+  ) +
+  theme_minimal() +
+  scale_fill_manual(values = c("weekdays" = "lightblue", "weekends" = "orange"))
+```
+
+6. Custom Plot (Bar Plot - Base Plotting System):
+```{r}
+top_cities <- aggregate(realSum ~ city, airbnb_data, mean)
+top_cities <- top_cities[order(-top_cities$realSum), ][1:5, ]
+
+barplot(
+  top_cities$realSum,
+  names.arg = top_cities$city,
+  col = "lightgreen",
+  main = "Top 5 Cities by Average Price",
+  xlab = "City",
+  ylab = "Average Price (realSum)"
+)
+```

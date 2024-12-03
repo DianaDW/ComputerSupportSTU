@@ -1,0 +1,104 @@
+---
+title: "Task4"
+author: "Diana Shchuka"
+format: 
+  html:
+    embed-resources: true
+editor: source
+---
+
+1. Function explore_city()
+   The function parses a single CSV file and returns the results in the form of a data frame:
+```{r}
+explore_city <- function(file_path) {
+  # Downloading data
+  data <- read.csv(file_path)
+  
+  # Extract the city name and day type
+  library(stringr)
+  details <- basename(file_path) |> 
+             tools::file_path_sans_ext() |> 
+             str_split_1("_")
+  city_name <- details[1]
+  day_type <- details[2]
+  
+  # Calculation of metrics
+  n_rows <- nrow(data)
+  min_price <- min(data$realSum, na.rm = TRUE)
+  avg_price <- mean(data$realSum, na.rm = TRUE)
+  max_price <- max(data$realSum, na.rm = TRUE)
+  avg_satisfaction <- mean(data$guest_satisfaction_overall, na.rm = TRUE)
+  
+  # Result
+  result <- data.frame(
+    city_name = city_name,
+    day_type = day_type,
+    n_rows = n_rows,
+    min_price = min_price,
+    avg_price = avg_price,
+    max_price = max_price,
+    avg_satisfaction = avg_satisfaction
+  )
+  
+  return(result)
+}
+
+#Analysis of a single file
+explore_city("D:/My/Study/STU/Computer-aided design studio/archive/amsterdam_weekdays.csv")
+```
+ 
+2. Function prepare_dataset()
+   The function reads all files in the folder, adds new columns, and saves the combined data set:
+```{r}
+prepare_dataset <- function(folder_path) {
+  # Get a list of files
+  file_list <- list.files(folder_path, full.names = TRUE)
+  
+  # Read all files and add new columns
+  combined_data <- lapply(file_list, function(file_path) {
+    data <- read.csv(file_path)
+    
+    # Extract the city name and day type
+    details <- basename(file_path) |> 
+               tools::file_path_sans_ext() |> 
+               str_split_1("_")
+    data$city <- details[1]
+    data$day_type <- details[2]
+    
+    return(data)
+  })
+  
+  # Combine all data into one set
+  merged_data <- do.call(rbind, combined_data)
+  
+  # Save the combined set as CSV
+  write.csv(merged_data, file = "airbnb.csv", row.names = FALSE)
+  
+  return(merged_data)
+}
+
+#Combine all data into one file
+prepare_dataset("D:/My/Study/STU/Computer-aided design studio/archive")
+```
+
+3. Functuin compare_means()
+   The function compares the average price values between two cities:
+```{r}
+compare_means <- function(city1_name, city2_name) {
+  # Loading the merged dataset
+  data <- read.csv("airbnb.csv")
+  
+  # Filtering data for two cities
+  city1 <- subset(data, city == city1_name)
+  city2 <- subset(data, city == city2_name)
+  
+  # Performing a t-test
+  t_test_result <- t.test(city1$realSum, city2$realSum, na.rm = TRUE)
+  
+  return(t_test_result)
+}
+
+#Price comparison between two cities
+compare_means("amsterdam", "berlin")
+```
+
